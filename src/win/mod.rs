@@ -16,6 +16,8 @@ use super::*;
     pub cursor_screen_x
     pub cursor_screen_y
     pub device
+    pub element_w
+    pub element_h
     pub inner_h
     pub inner_w
     pub outer_h

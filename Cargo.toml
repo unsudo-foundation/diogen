@@ -20,6 +20,7 @@ dependencies.web-sys.features = [
     "Event",
     "Element",
     "Document",
+    "DomRect",
     "console"
 ]
 dependencies.js-sys.version = ">=0.3.77,<1.0.0"
