@@ -52,12 +52,18 @@ type DropTokenSlot = Option<::std::rc::Rc<::std::cell::RefCell<Box<dyn FnMut() +
 struct DropToken(DropTokenSlot);
 
 impl DropToken {
-    pub fn from(event_handler: Box<dyn FnMut() + 'static>) -> Self {
+    pub fn from_static_dyn_fn_mut_box(on_event: Box<dyn FnMut() + 'static>) -> Self {
         Self({
-            let ret: ::std::cell::RefCell<_> = ::std::cell::RefCell::new(event_handler);
+            let ret: ::std::cell::RefCell<_> = ::std::cell::RefCell::new(on_event);
             let ret: ::std::rc::Rc<_> = ::std::rc::Rc::new(ret);
             let ret: Option<_> = Some(ret);
             ret
+        })
+    }
+
+    pub fn from_dyn_fn_mut_closure(on_event: ::wasm_bindgen::closure::Closure<dyn FnMut()>) -> Self {
+        Self({
+
         })
     }
 }
@@ -117,7 +123,7 @@ where
             win.add_event_listener_with_callback(event, closure).map_err(Error::EventListenerAttachmentFailure)?;
         }
     };
-    Ok(DropToken::from(Box::new({
+    Ok(DropToken::from_static_dyn_fn_mut_box(Box::new({
         let closure: rc::Rc<_> = closure.to_owned();
         let events: Vec<_> = events.to_owned();
         move || {

@@ -1,10 +1,11 @@
+use super::*;
 use ::wasm_bindgen::prelude::*;
 use ::std::time;
 
 pub type Cancel = Closure<dyn FnMut()>;
 
 #[inline]
-pub fn on_animation_frame<T>(mut on_animation_frame: T) -> Result<Cancel, JsValue>
+pub fn on_animation_frame<T>(mut on_animation_frame: T) -> Result<DropToken, JsValue>
 where
     T: FnMut() + 'static {
     let event_handler_closure: Closure<_> = Closure::wrap(Box::new(move || {

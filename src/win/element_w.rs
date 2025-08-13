@@ -1,8 +1,9 @@
 use super::*;
 
 pub fn use_element_w(id: &'static str) -> Signal<Option<Result<f64>>> {
+    use ::wasm_bindgen::prelude::*;
     let ret: Signal<Option<Result<f64>>> = use_signal(|| None);
-    let drop_token: Signal<Option<DropToken>> = use_signal(|| None);
+    let cancel: Signal<Option<Closure<dyn FnMut()>>> = use_signal(|| None);
 
     let update = {
         let mut ret: Signal<_> = ret.to_owned();
@@ -32,26 +33,33 @@ pub fn use_element_w(id: &'static str) -> Signal<Option<Result<f64>>> {
     });
 
     use_effect({
-        let mut update = update.to_owned();
+        let update = update.to_owned();
+        let mut cancel: Signal<_> = cancel.to_owned();
         let mut ret: Signal<_> = ret.to_owned();
-        let mut drop_token: Signal<_> = drop_token.to_owned();
         move || {
-            match on(vec!["resize"], move |_: ::web_sys::Event| {
-                update();
+            match on_animation_frame({
+                let mut update = update.to_owned();
+                move || {
+                    update();
+                }
             }) {
-                Ok(new_drop_token) => {
-                    drop_token.set(None);
-                    drop_token.set(Some(new_drop_token));
+                Ok(new_cancel) => {
+                    let cancel =
+                    if let Some(old_cancel) = cancel() {
+                        old_cancel();
+                    }
+                    cancel.set(None);
+                    cancel.set(Some(new_cancel));
                 },
                 Err(e) => {
-                    ret.set(Some(Err(e)));
+                    ret.set(Some(Err(Error::EventListenerAttachmentFailure(e))));
                 }
             }
         }
     });
 
     use_drop({
-        let mut drop_token: Signal<_> = drop_token.to_owned();
+        let mut drop_token: Signal<_> = cancel.to_owned();
         move || {
             drop_token.set(None);
         }
