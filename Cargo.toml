@@ -1,5 +1,6 @@
 package.name = "diogen"
 package.description = "Dioxus lib"
+package.license = "Apache-2.0"
 package.repository = "https://github.com/unsudo-foundation/diogen"
 package.keywords = [
     "dioxus"
