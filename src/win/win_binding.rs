@@ -4,8 +4,7 @@ use ::std::time;
 
 pub type Cancel = Closure<dyn FnMut()>;
 
-#[inline]
-pub fn on_animation_frame<T>(mut on_animation_frame: T) -> Result<DropToken, JsValue>
+pub fn on_animation_frame<T>(mut on_animation_frame: T) -> ::std::result::Result<DropToken, JsValue>
 where
     T: FnMut() + 'static {
     let event_handler_closure: Closure<_> = Closure::wrap(Box::new(move || {
@@ -17,11 +16,10 @@ where
         cancel.call0(&JsValue::NULL).ok();
     }) as Box<dyn FnMut()>);
     event_handler_closure.forget();
-    Ok(cancel_closure)
+    Ok(DropToken::from_dyn_fn_mut_closure(cancel_closure))
 }
 
-#[inline]
-pub fn on_timeout<T>(duration: time::Duration, mut event_handler: T) -> Result<Cancel, JsValue> 
+pub fn on_timeout<T>(duration: time::Duration, mut event_handler: T) -> ::std::result::Result<Cancel, JsValue> 
 where 
     T: FnMut() + 'static {
     let ms: u128 = duration.as_millis();
@@ -39,8 +37,7 @@ where
     Ok(cancel_closure)
 }
 
-#[inline]
-pub fn on_interval<T>(duration: time::Duration, mut event_handler: T) -> Result<Cancel, JsValue>
+pub fn on_interval<T>(duration: time::Duration, mut event_handler: T) -> ::std::result::Result<Cancel, JsValue>
 where
     T: FnMut() + 'static {
     let ms: u128 = duration.as_millis();
@@ -64,12 +61,12 @@ mod js {
     #[wasm_bindgen(module = "target/js/win-binding.js")]
     extern "C" {
         #[wasm_bindgen(catch)]
-        pub fn on_animation_frame(event_handler: &::js_sys::Function) -> Result<::js_sys::Function, JsValue>;
+        pub fn on_animation_frame(event_handler: &::js_sys::Function) -> ::std::result::Result<::js_sys::Function, JsValue>;
 
         #[wasm_bindgen(catch)]
-        pub fn on_timeout(ms: JsValue, event_handler: &::js_sys::Function) -> Result<::js_sys::Function, JsValue>;
+        pub fn on_timeout(ms: JsValue, event_handler: &::js_sys::Function) -> ::std::result::Result<::js_sys::Function, JsValue>;
 
         #[wasm_bindgen(catch)]
-        pub fn on_interval(ms: JsValue, event_handler: &::js_sys::Function) -> Result<::js_sys::Function, JsValue>;
+        pub fn on_interval(ms: JsValue, event_handler: &::js_sys::Function) -> ::std::result::Result<::js_sys::Function, JsValue>;
     }
 }

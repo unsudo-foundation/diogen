@@ -1,3 +1,5 @@
+use wasm_bindgen::JsCast;
+
 use super::*;
 
 #[cfg(feature = "binding")]
@@ -63,7 +65,20 @@ impl DropToken {
 
     pub fn from_dyn_fn_mut_closure(on_event: ::wasm_bindgen::closure::Closure<dyn FnMut()>) -> Self {
         Self({
-
+            let ret: ::std::cell::RefCell<_> = ::std::cell::RefCell::new(on_event);
+            let ret: ::std::rc::Rc<_> = ::std::rc::Rc::new(ret);
+            let ret: Box<dyn FnMut()> = Box::new({
+                let ptr: ::std::rc::Rc<_> = ret.to_owned();
+                move || {
+                    let c: ::std::cell::RefMut<_> = ptr.borrow_mut();
+                    let c: &::js_sys::Function = c.as_ref().unchecked_ref();
+                    c.call0(&::wasm_bindgen::JsValue::NULL);
+                }
+            });
+            let ret: ::std::cell::RefCell<_> = ::std::cell::RefCell::new(ret);
+            let ret: ::std::rc::Rc<_> = ::std::rc::Rc::new(ret);
+            let ret: Option<_> = Some(ret);
+            ret
         })
     }
 }
