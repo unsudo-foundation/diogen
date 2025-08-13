@@ -18,8 +18,9 @@ dependencies.web-sys.features = [
     "Document",
     "console"
 ]
-dependencies.js-sys.version = "*"
-dependencies.wasm-bindgen.version = "*"
+dependencies.js-sys.version = ">=0.3.77,<1.0.0"
+dependencies.wasm-bindgen.version = ">=0.2.1,<1.0.0"
 dependencies.wasm-bindgen-futures.version = ">=0.4.5,<1.0.0"
 dependencies.serde.version = "*"
 dependencies.serde-wasm-bindgen = "*"
+dependencies.paste.version = "*"

@@ -1,6 +1,6 @@
 use ::dioxus::prelude::*;
 
-pub mod modf;
+pub mod bind;
 pub mod win;
 
 ::modwire::expose!(
