@@ -4,11 +4,11 @@ use ::std::time;
 pub type Cancel = Closure<dyn FnMut()>;
 
 #[inline]
-pub fn on_animation_frame<T>(mut event_handler: T) -> Result<Cancel, JsValue>
+pub fn on_animation_frame<T>(mut on_animation_frame: T) -> Result<Cancel, JsValue>
 where
     T: FnMut() + 'static {
     let event_handler_closure: Closure<_> = Closure::wrap(Box::new(move || {
-        event_handler();
+        on_animation_frame();
     }) as Box<dyn FnMut()>);
     let event_handler_closure_ref: &::js_sys::Function = event_handler_closure.as_ref().unchecked_ref();
     let cancel: ::js_sys::Function = js::on_animation_frame(event_handler_closure_ref)?;
