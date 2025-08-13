@@ -1,6 +1,7 @@
 use super::*;
 
-#[cfg(feature = "bind")]
+#[cfg(feature = "binding")]
+#[cfg(feature = "win-binding")]
 ::modwire::expose!(
     pub win_binding
 );

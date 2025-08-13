@@ -25,6 +25,8 @@ dependencies.serde.version = "*"
 dependencies.serde-wasm-bindgen = "*"
 dependencies.paste.version = "*"
 features.default = [
-    "bind"
+    "binding",
+    "win-binding"
 ]
-features.bind = []
+features.binding = []
+features.win-binding = []

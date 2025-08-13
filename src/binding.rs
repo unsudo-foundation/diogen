@@ -337,14 +337,14 @@ mod sig_test {
     use super::*;
     
     fn success() {
-        bind!(async "/src/bind.js"::test_0(a: u8, b: u8, c: u8) -> u8);
-        bind!(async "/src/bind.js"::test_1(a: u8, b: u8, c: u8));
-        bind!(async "/src/bind.js"::test_2() -> u8);
-        bind!(async "/src/bind.js"::test_3());        
-        bind!("/src/bind.js"::test_4(a: u8, b: u8, c: u8) -> u8);
-        bind!("/src/bind.js"::test_5(a: u8, b: u8, c: u8));
-        bind!("/src/bind.js"::test_6() -> u8);
-        bind!("/src/bind.js"::test_7());
+        bind!(async "/src/binding.js"::test_0(a: u8, b: u8, c: u8) -> u8);
+        bind!(async "/src/binding.js"::test_1(a: u8, b: u8, c: u8));
+        bind!(async "/src/binding.js"::test_2() -> u8);
+        bind!(async "/src/binding.js"::test_3());        
+        bind!("/src/binding.js"::test_4(a: u8, b: u8, c: u8) -> u8);
+        bind!("/src/binding.js"::test_5(a: u8, b: u8, c: u8));
+        bind!("/src/binding.js"::test_6() -> u8);
+        bind!("/src/binding.js"::test_7());
 
         function!(move || -> u8 {
             200

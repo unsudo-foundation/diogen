@@ -1,7 +1,7 @@
 use ::dioxus::prelude::*;
 
-#[cfg(feature = "bind")]
-pub mod bind;
+#[cfg(feature = "binding")]
+pub mod binding;
 
 pub mod win;
 

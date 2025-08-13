@@ -1,7 +1,7 @@
 (async () => {
     (await Bun.build({
         entrypoints: [
-            "src/win/bind.ts"
+            "src/win/win-binding.ts"
         ],
         outdir: "target/js/",
         minify: true,

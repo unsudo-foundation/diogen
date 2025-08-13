@@ -60,7 +60,7 @@ where
 mod js {
     use super::*;
     
-    #[wasm_bindgen(module = "/target/js/bind.js")]
+    #[wasm_bindgen(module = "target/js/win-binding.js")]
     extern "C" {
         #[wasm_bindgen(catch)]
         pub fn on_animation_frame(event_handler: &::js_sys::Function) -> Result<::js_sys::Function, JsValue>;
