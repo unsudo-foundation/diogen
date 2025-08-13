@@ -19,7 +19,7 @@ where
     Ok(DropToken::from_dyn_fn_mut_closure(cancel_closure))
 }
 
-pub fn on_timeout<T>(duration: time::Duration, mut event_handler: T) -> ::std::result::Result<Cancel, JsValue> 
+pub fn on_timeout<T>(duration: time::Duration, mut event_handler: T) -> ::std::result::Result<DropToken, JsValue> 
 where 
     T: FnMut() + 'static {
     let ms: u128 = duration.as_millis();
@@ -34,10 +34,10 @@ where
         cancel.call0(&JsValue::NULL).ok();
     }) as Box<dyn FnMut()>);
     event_handler_closure.forget();
-    Ok(cancel_closure)
+    Ok(DropToken::from_dyn_fn_mut_closure(cancel_closure))
 }
 
-pub fn on_interval<T>(duration: time::Duration, mut event_handler: T) -> ::std::result::Result<Cancel, JsValue>
+pub fn on_interval<T>(duration: time::Duration, mut event_handler: T) -> ::std::result::Result<DropToken, JsValue>
 where
     T: FnMut() + 'static {
     let ms: u128 = duration.as_millis();
@@ -52,7 +52,7 @@ where
         cancel.call0(&JsValue::NULL).ok();
     }) as Box<dyn FnMut()>);
     event_handler_closure.forget();
-    Ok(cancel_closure)
+    Ok(DropToken::from_dyn_fn_mut_closure(cancel_closure))
 }
 
 mod js {

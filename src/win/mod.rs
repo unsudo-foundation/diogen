@@ -51,7 +51,7 @@ pub enum Error {
 type DropTokenSlot = Option<::std::rc::Rc<::std::cell::RefCell<Box<dyn FnMut() + 'static>>>>;
 
 #[repr(transparent)]
-struct DropToken(DropTokenSlot);
+pub struct DropToken(DropTokenSlot);
 
 impl DropToken {
     pub fn from_static_dyn_fn_mut_box(on_event: Box<dyn FnMut() + 'static>) -> Self {
@@ -72,7 +72,11 @@ impl DropToken {
                 move || {
                     let c: ::std::cell::RefMut<_> = ptr.borrow_mut();
                     let c: &::js_sys::Function = c.as_ref().unchecked_ref();
-                    c.call0(&::wasm_bindgen::JsValue::NULL);
+                    if c.call0(&::wasm_bindgen::JsValue::NULL).is_err() {
+                        ::web_sys::console::log_1(&r#"
+                            [ALERT] Cleanup procedure aborted. Residual closure may persist in memory. Investigate reference counts and reentrancy conditions.
+                        "#.into());
+                    }
                 }
             });
             let ret: ::std::cell::RefCell<_> = ::std::cell::RefCell::new(ret);
