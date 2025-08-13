@@ -2,6 +2,9 @@
 	"name": "diogen",
 	"type": "module",
 	"private": true,
+	"scripts": {
+		"build": "bun run /script/build.ts"
+	},
 	"devDependencies": {
 		"@types/bun": "latest"
 	},

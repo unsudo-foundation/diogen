@@ -1,5 +1,10 @@
 use super::*;
 
+#[cfg(feature = "bind")]
+::modwire::expose!(
+    pub win_binding
+);
+
 ::modwire::expose!(
     pub cursor_client_x
     pub cursor_client_y
