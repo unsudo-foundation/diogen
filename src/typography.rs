@@ -1,5 +1,6 @@
 use super::*;
 
+#[repr(u8)]
 #[derive(Clone)]
 #[derive(PartialEq)]
 #[derive(Default)]
@@ -17,6 +18,7 @@ pub enum Alignment {
     Right
 }
 
+#[repr(u8)]
 #[derive(Clone)]
 #[derive(PartialEq)]
 #[derive(::strum_macros::Display)]
@@ -32,6 +34,7 @@ pub enum Decor {
     Blink
 }
 
+#[repr(u8)]
 #[derive(Clone)]
 #[derive(PartialEq)]
 #[derive(Default)]
@@ -50,6 +53,7 @@ pub enum DecorStyle {
     Wavy
 }
 
+#[repr(u8)]
 #[derive(Clone)]
 #[derive(PartialEq)]
 #[derive(Default)]
@@ -67,6 +71,7 @@ pub enum Weight {
     Lighter
 }
 
+#[repr(u8)]
 #[derive(Clone)]
 #[derive(PartialEq)]
 #[derive(Default)]
@@ -85,6 +90,7 @@ pub enum WhiteSpace {
     PreLine
 }
 
+#[repr(u8)]
 #[derive(Clone)]
 #[derive(PartialEq)]
 #[derive(Default)]
@@ -101,6 +107,7 @@ pub enum OverflowWrap {
     Anywhere
 }
 
+#[repr(u8)]
 #[derive(Clone)]
 #[derive(PartialEq)]
 #[derive(Default)]

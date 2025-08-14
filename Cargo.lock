@@ -241,7 +241,7 @@ dependencies = [
 
 [[package]]
 name = "diogen"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "dioxus",
  "js-sys",
