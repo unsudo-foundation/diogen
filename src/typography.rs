@@ -169,7 +169,7 @@ where
 /// function Main() -> Element {
 ///     rsx!(
 ///         ::diogen::typography::Typography::<Family> {
-///             size: Some(("em", 1.0).into()),
+///             size: Some(("em".into(), 1.0).into()),
 ///             gradient_direction: "bottom-right".into(),
 ///             colors: vec!(
 ///                 0x202020.into(),
@@ -192,7 +192,7 @@ where
         (unit::Relative::Em, 1.0).into()
     });
     let family = props.family.unwrap_or_default();
-    let weight  = props.weight.unwrap_or_default();
+    let weight = props.weight.unwrap_or_default();
     let gradient = props.gradient.unwrap_or_default();
     let gradient_direction = props.gradient_direction.unwrap_or_default();
     let colors = props.colors.unwrap_or_else(|| {
@@ -251,6 +251,10 @@ where
                     font-family: {};
                     font-weight: {};
                     background: {};
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    color: transparent;
                     letter-spacing: {};
                     word-spacing: {};
                     text-decoration: {};

@@ -251,6 +251,7 @@ dependencies = [
  "serde-wasm-bindgen 0.6.5",
  "strum",
  "strum_macros",
+ "thiserror",
  "wasm-bindgen",
  "wasm-bindgen-futures",
  "web-sys",
