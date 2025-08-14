@@ -43,8 +43,11 @@ where
 #[derive(Debug)]
 #[derive(Clone)]
 #[derive(PartialEq)]
-#[derive(::strum_macros::EnumString)]
 #[derive(::strum_macros::Display)]
+#[derive(::strum_macros::EnumString)]
+#[derive(::strum_macros::EnumCount)]
+#[derive(::strum_macros::IntoStaticStr)]
+#[derive(::strum_macros::EnumIter)]
 #[strum(serialize_all = "lowercase")]
 pub enum Absolute {
     Px,
@@ -69,8 +72,11 @@ impl Absolute {
 #[derive(Debug)]
 #[derive(Clone)]
 #[derive(PartialEq)]
-#[derive(::strum_macros::EnumString)]
 #[derive(::strum_macros::Display)]
+#[derive(::strum_macros::EnumString)]
+#[derive(::strum_macros::EnumCount)]
+#[derive(::strum_macros::IntoStaticStr)]
+#[derive(::strum_macros::EnumIter)]
 #[strum(serialize_all = "lowercase")]
 pub enum Relative {
     Em,
@@ -95,8 +101,11 @@ impl Relative {
 #[derive(Debug)]
 #[derive(Clone)]
 #[derive(PartialEq)]
-#[derive(::strum_macros::EnumString)]
 #[derive(::strum_macros::Display)]
+#[derive(::strum_macros::EnumString)]
+#[derive(::strum_macros::EnumCount)]
+#[derive(::strum_macros::IntoStaticStr)]
+#[derive(::strum_macros::EnumIter)]
 #[strum(serialize_all = "lowercase")]
 pub enum Viewport {
     Vw,
@@ -126,8 +135,11 @@ impl Viewport {
 #[derive(Debug)]
 #[derive(Clone)]
 #[derive(PartialEq)]
-#[derive(::strum_macros::EnumString)]
 #[derive(::strum_macros::Display)]
+#[derive(::strum_macros::EnumString)]
+#[derive(::strum_macros::EnumCount)]
+#[derive(::strum_macros::IntoStaticStr)]
+#[derive(::strum_macros::EnumIter)]
 #[strum(serialize_all = "lowercase")]
 pub enum Angle {
     Grad,
@@ -149,8 +161,11 @@ impl Angle {
 #[derive(Debug)]
 #[derive(Clone)]
 #[derive(PartialEq)]
-#[derive(::strum_macros::EnumString)]
 #[derive(::strum_macros::Display)]
+#[derive(::strum_macros::EnumString)]
+#[derive(::strum_macros::EnumCount)]
+#[derive(::strum_macros::IntoStaticStr)]
+#[derive(::strum_macros::EnumIter)]
 #[strum(serialize_all = "lowercase")]
 pub enum Time {
     S,
@@ -170,8 +185,11 @@ impl Time {
 #[derive(Debug)]
 #[derive(Clone)]
 #[derive(PartialEq)]
-#[derive(::strum_macros::EnumString)]
 #[derive(::strum_macros::Display)]
+#[derive(::strum_macros::EnumString)]
+#[derive(::strum_macros::EnumCount)]
+#[derive(::strum_macros::IntoStaticStr)]
+#[derive(::strum_macros::EnumIter)]
 #[strum(serialize_all = "lowercase")]
 pub enum Frequency {
     Hz,
@@ -191,8 +209,11 @@ impl Frequency {
 #[derive(Debug)]
 #[derive(Clone)]
 #[derive(PartialEq)]
-#[derive(::strum_macros::EnumString)]
 #[derive(::strum_macros::Display)]
+#[derive(::strum_macros::EnumString)]
+#[derive(::strum_macros::EnumCount)]
+#[derive(::strum_macros::IntoStaticStr)]
+#[derive(::strum_macros::EnumIter)]
 #[strum(serialize_all = "lowercase")]
 pub enum Resolution {
     Dpi,
