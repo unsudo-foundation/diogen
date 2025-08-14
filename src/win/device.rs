@@ -12,7 +12,6 @@ pub enum Device {
     MobileS
 }
 
-#[inline]
 pub fn use_device() -> Signal<Option<Result<Device>>> {
     let inner_w: Signal<_> = use_inner_w();
     let mut ret: Signal<Option<Result<Device>>> = use_signal(|| None);
