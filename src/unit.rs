@@ -19,12 +19,13 @@ where
     pub n: f64
 }
 
-impl<T> From<(T, f64)> for Unit<T> 
+impl<A, B> From<(B, f64)> for Unit<A> 
 where
-    T: Measurable {
-    fn from(value: (T, f64)) -> Self {
+    A: Measurable,
+    B: Into<A> {
+    fn from(value: (B, f64)) -> Self {
         Self {
-            measurement: value.0,
+            measurement: value.0.into(),
             n: value.1
         }
     }

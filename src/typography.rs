@@ -142,13 +142,13 @@ where
 /// function Main() -> Element {
 ///     rsx!(
 ///         ::diogen::typography::Typography::<Family> {
-///             size: Some((::diogen::unit::Relative::Em, 1.0).into()),
-///             gradient_direction: ::diogen::direction::Direction::BottomRight,
+///             size: Some(("em", 1.0).into()),
+///             gradient_direction: "bottom-right".into(),
 ///             colors: vec!(
 ///                 0x202020.into(),
 ///                 0xffffff.into()
 ///             ),
-///             family: Family::SansSerif
+///             family: "sans-serif".into()
 ///         }
 ///     )
 /// }
