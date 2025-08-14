@@ -4,6 +4,10 @@ use super::*;
 #[derive(PartialEq)]
 #[derive(Default)]
 #[derive(::strum_macros::Display)]
+#[derive(::strum_macros::EnumString)]
+#[derive(::strum_macros::EnumCount)]
+#[derive(::strum_macros::IntoStaticStr)]
+#[derive(::strum_macros::EnumIter)]
 #[strum(serialize_all = "kebab-case")]
 pub enum Alignment {
     #[default]
@@ -16,6 +20,10 @@ pub enum Alignment {
 #[derive(Clone)]
 #[derive(PartialEq)]
 #[derive(::strum_macros::Display)]
+#[derive(::strum_macros::EnumString)]
+#[derive(::strum_macros::EnumCount)]
+#[derive(::strum_macros::IntoStaticStr)]
+#[derive(::strum_macros::EnumIter)]
 #[strum(serialize_all = "kebab-case")]
 pub enum Decor {
     Underline,
@@ -28,6 +36,10 @@ pub enum Decor {
 #[derive(PartialEq)]
 #[derive(Default)]
 #[derive(::strum_macros::Display)]
+#[derive(::strum_macros::EnumString)]
+#[derive(::strum_macros::EnumCount)]
+#[derive(::strum_macros::IntoStaticStr)]
+#[derive(::strum_macros::EnumIter)]
 #[strum(serialize_all = "kebab-case")]
 pub enum DecorStyle {
     #[default]
@@ -41,15 +53,11 @@ pub enum DecorStyle {
 #[derive(Clone)]
 #[derive(PartialEq)]
 #[derive(Default)]
-pub enum Family {
-    #[default]
-    BrCobane
-}
-
-#[derive(Clone)]
-#[derive(PartialEq)]
-#[derive(Default)]
 #[derive(::strum_macros::Display)]
+#[derive(::strum_macros::EnumString)]
+#[derive(::strum_macros::EnumCount)]
+#[derive(::strum_macros::IntoStaticStr)]
+#[derive(::strum_macros::EnumIter)]
 #[strum(serialize_all = "kebab-case")]
 pub enum Weight {
     #[default]
@@ -63,6 +71,10 @@ pub enum Weight {
 #[derive(PartialEq)]
 #[derive(Default)]
 #[derive(::strum_macros::Display)]
+#[derive(::strum_macros::EnumString)]
+#[derive(::strum_macros::EnumCount)]
+#[derive(::strum_macros::IntoStaticStr)]
+#[derive(::strum_macros::EnumIter)]
 #[strum(serialize_all = "kebab-case")]
 pub enum WhiteSpace {
     #[default]
@@ -77,6 +89,10 @@ pub enum WhiteSpace {
 #[derive(PartialEq)]
 #[derive(Default)]
 #[derive(::strum_macros::Display)]
+#[derive(::strum_macros::EnumString)]
+#[derive(::strum_macros::EnumCount)]
+#[derive(::strum_macros::IntoStaticStr)]
+#[derive(::strum_macros::EnumIter)]
 #[strum(serialize_all = "kebab-case")]
 pub enum OverflowWrap {
     #[default]
@@ -89,6 +105,10 @@ pub enum OverflowWrap {
 #[derive(PartialEq)]
 #[derive(Default)]
 #[derive(::strum_macros::Display)]
+#[derive(::strum_macros::EnumString)]
+#[derive(::strum_macros::EnumCount)]
+#[derive(::strum_macros::IntoStaticStr)]
+#[derive(::strum_macros::EnumIter)]
 pub enum Gradient {
     #[default]
     #[strum(serialize = "linear-gradient")]
