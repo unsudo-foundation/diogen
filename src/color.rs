@@ -14,6 +14,12 @@ impl Color {
     }
 }
 
+impl Default for Color {
+    fn default() -> Self {
+        Self::from_hex(0xffffff)
+    }
+}
+
 impl From<u32> for Color {
     fn from(value: u32) -> Self {
         if value > 0xffffff {

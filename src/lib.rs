@@ -9,6 +9,7 @@ pub mod binding;
 pub mod color;
 pub mod direction;
 pub mod easing;
+pub mod typography;
 pub mod unit;
 
 ::modwire::expose!(

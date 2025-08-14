@@ -30,6 +30,14 @@ where
     }
 }
 
+impl<T> ::std::fmt::Display for Unit<T>
+where
+    T: Measurable {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}{}", self.n, self.measurement)
+    }
+}
+
 
 #[derive(Debug)]
 #[derive(Clone)]
