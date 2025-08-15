@@ -1,3 +1,3 @@
 # diogen
 
-Please beaware that this crate is not yet stable.
+Please be aware that this crate is not yet stable.
