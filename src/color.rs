@@ -169,14 +169,26 @@ impl TryFrom<&str> for Color {
     }
 }
 
-impl TryFrom<u32> for Color {
+impl TryFrom<Hex> for Color {
     type Error = Error;
 
-    fn try_from(value: u32) -> ::std::result::Result<Self, Self::Error> {
+    fn try_from(value: Hex) -> ::std::result::Result<Self, Self::Error> {
         if value > 0xffffff {
             return Err(Error::ValueOutOf24BitRGBRange)
         }
         Ok(Self::Hex(value))
+    }
+}
+
+impl From<Rgb> for Color {
+    fn from(value: Rgb) -> Self {
+        Self::from_rgb(value)
+    }
+}
+
+impl From<Rgba> for Color {
+    fn from(value: Rgba) -> Self {
+        Self::from_rgba(value)
     }
 }
 
