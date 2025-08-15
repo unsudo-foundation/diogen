@@ -196,7 +196,9 @@ where
     let gradient = props.gradient.unwrap_or_default();
     let gradient_direction = props.gradient_direction.unwrap_or_default();
     let colors = props.colors.unwrap_or_else(|| {
-        vec!(0xffffff.into())
+        vec!(
+            0xffffff.try_into().unwrap()
+        )
     });
     let letter_spacing = props.letter_spacing.unwrap_or_else(|| {
         (unit::Relative::Em, 1.0).into()

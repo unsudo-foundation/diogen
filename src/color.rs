@@ -7,17 +7,15 @@ pub type Result<T> = ::std::result::Result<T, Error>;
 #[derive(Debug)]
 #[derive(::thiserror::Error)]
 pub enum Error {
-    #[error("")]
+    #[error("{0}")]
     TryFromIntError(#[from] ::std::num::TryFromIntError),
-    #[error("")]
-    EmptyStringOnConversion,
-    #[error("")]
-    StringTooShortOnConversion,
-    #[error("")]
-    StringTooLongOnConversion,
-    #[error("")]
+    #[error("Str too short on conversion.")]
+    StrTooShortOnConversion,
+    #[error("Str too long on conversion.")]
+    StrTooLongOnConversion,
+    #[error("Illegal char on conversion.")]
     IllegalCharOnConversion,
-    #[error("")]
+    #[error("Value out of 24-bit rgb range.")]
     ValueOutOf24BitRGBRange
 }
 
@@ -57,9 +55,9 @@ impl Color {
         let s: &str = rep.trim_start_matches('#');
         if s.len() != 6 {
             return Err(if s.len() < 6 {
-                Error::StringTooShortOnConversion
+                Error::StrTooShortOnConversion
             } else {
-                Error::StringTooLongOnConversion
+                Error::StrTooLongOnConversion
             })
         }
         for c in s.chars() {
@@ -156,9 +154,9 @@ impl TryFrom<&str> for Color {
         let s = value.trim_start_matches('#');
         if s.len() != 6 {
             return Err(if s.len() < 6 {
-                Error::StringTooShortOnConversion
+                Error::StrTooShortOnConversion
             } else {
-                Error::StringTooLongOnConversion
+                Error::StrTooLongOnConversion
             })
         }
         for c in s.chars() {
