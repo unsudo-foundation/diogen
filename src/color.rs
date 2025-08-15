@@ -1,13 +1,6 @@
-static HEX_CHAR: [char; 22] = [
-    '0', '1', '2',
-    '3', '4', '5',
-    '6', '7', '8',
-    '9',
-    'A', 'B', 'C',
-    'D', 'E', 'F',
-    'a', 'b', 'c',
-    'd', 'e', 'f'
-];
+pub type Hex = u32;
+pub type Rgb = (u8, u8, u8);
+pub type Rgba = (u8, u8, u8, f32);
 
 pub type Result<T> = ::std::result::Result<T, Error>;
 
@@ -25,22 +18,118 @@ pub enum Error {
     #[error("")]
     IllegalCharOnConversion,
     #[error("")]
-    HexOutOfRange
+    ValueOutOf24BitRGBRange
 }
 
 #[derive(Debug)]
 #[derive(Clone)]
 #[derive(PartialEq)]
 pub enum Color {
-    Hex(u32)
+    Hex(Hex),
+    Rgb(Rgb),
+    Rgba(Rgba)
 }
 
 impl Color {
-    pub const fn from_hex(code: u32) -> Self {
-        if code > 0xffffff {
+    pub const fn from_rgb(raw: Rgb) -> Self {
+        let r = raw.0;
+        let g = raw.1;
+        let b = raw.2;
+        Self::Rgb((r, g, b))
+    }
+
+    pub const fn from_rgba(raw: Rgba) -> Self {
+        let r = raw.0;
+        let g = raw.1;
+        let b = raw.2;
+        let a = raw.3.clamp(0.0, 1.0);
+        Self::Rgba((r, g, b, a))
+    }
+
+    pub const fn from_hex(raw: Hex) -> Self {
+        if raw > 0xffffff {
             panic!("[ABORT] Value out of 24-bit RGB range");
         }
-        Self::Hex(code)
+        Self::Hex(raw)
+    }
+
+    pub fn from_hex_rep(rep: &str) -> Result<Self> {
+        let s: &str = rep.trim_start_matches('#');
+        if s.len() != 6 {
+            return Err(if s.len() < 6 {
+                Error::StringTooShortOnConversion
+            } else {
+                Error::StringTooLongOnConversion
+            })
+        }
+        for c in s.chars() {
+            Self::only_hex_char(c)?;
+        }
+        let ret: u32 = u32::from_str_radix(s, 16).unwrap();
+        Ok(Self::Hex(ret))
+    }
+
+    fn only_hex_char(c: char) -> Result<char> {
+        if !c.is_ascii_hexdigit() {
+            return Err(Error::IllegalCharOnConversion)
+        }
+        Ok(c)
+    }
+
+    pub const fn hex(&self) -> u32 {
+        match self {
+            Self::Hex(code) => *code,
+            Self::Rgb((r, g, b)) | Self::Rgba((r, g, b, _)) => ((*r as u32) << 16) | ((*g as u32) << 8) | (*b as u32)
+        }
+    }
+
+    pub fn hex_rep(&self) -> String {
+        let hex: u32 = self.hex();
+        format!("#{:06X}", hex)
+    }
+
+    pub const fn rgb(&self) -> (u8, u8, u8) {
+        match self {
+            Self::Hex(code) => (
+                ((*code >> 16) & 0xff) as u8,
+                ((*code >> 8) & 0xff) as u8,
+                (*code & 0xff) as u8
+            ),
+            Self::Rgb((r, g, b)) | Self::Rgba((r, g, b, _)) => (*r, *g, *b)
+        }
+    }
+
+    pub fn rgb_rep(&self) -> String {
+        let (r, g, b) = self.rgb();
+        format!("rgb({}, {}, {})", r, g, b)
+    }
+
+    pub fn rgba(&self) -> (u8, u8, u8, f32) {
+        match self {
+            Self::Hex(code) => (
+                ((*code >> 16) & 0xff) as u8,
+                ((*code >> 8) & 0xff) as u8,
+                (*code & 0xff) as u8,
+                1.0
+            ),
+            Self::Rgb((r, g, b)) => (*r, *g, *b, 1.0),
+            Self::Rgba((r, g, b, a)) => (*r, *g, *b, *a)
+        }
+    }
+
+    pub fn rgba_rep(&self) -> String {
+        let (r, g, b, a) = self.rgba();
+        format!("rgba({}, {}, {}, {})", r, g, b, a)
+    }
+
+    pub fn interpolate(&self, rhs: Self, t: f32) -> Self {
+        let (rx, gx, bx, ax) = self.rgba();
+        let (ry, gy, by, ay) = rhs.rgba();
+        let r: u8 = (rx as f32 + (ry as f32 - rx as f32) * t).round() as u8;
+        let g: u8 = (gx as f32 + (gy as f32 - gx as f32) * t).round() as u8;
+        let b: u8 = (bx as f32 + (by as f32 - bx as f32) * t).round() as u8;
+        let a: f32 = ax + (ay - ax) * t;
+        Self::Rgba((r, g, b, a))
     }
 }
 
@@ -54,43 +143,9 @@ impl TryFrom<String> for Color {
     type Error = Error;
 
     fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
-        let mut s: String = String::new();
-        if value.is_empty() {
-            return Err(Error::EmptyStringOnConversion)
-        }
-        if !value.starts_with("#") {
-            if value.len() < 6 {
-                return Err(Error::StringTooShortOnConversion)
-            }
-            if value.len() > 6 {
-                return Err(Error::StringTooLongOnConversion)
-            }
-            for char in value.chars() {
-                for hex_char in HEX_CHAR {
-                    if char != hex_char {
-                        return Err(Error::IllegalCharOnConversion)
-                    }
-                }
-                s.push(char);
-            }
-        } else {
-            if value.len() < 7 {
-                return Err(Error::StringTooShortOnConversion)
-            }
-            if value.len() > 7 {
-                return Err(Error::StringTooLongOnConversion)
-            }
-            for char in value.chars() {
-                for hex_char in HEX_CHAR {
-                    if char != hex_char {
-                        return Err(Error::IllegalCharOnConversion)
-                    }
-                }
-                s.push(char);
-            }
-        }
-        let ret = u32::from_str_radix(&s, 16).unwrap();
-        Ok(Self::Hex(ret))
+        let ret: &str = &value;
+        let ret: Self = ret.try_into()?;
+        Ok(ret)
     }
 }
 
@@ -98,62 +153,19 @@ impl TryFrom<&str> for Color {
     type Error = Error;
 
     fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
-        if value.is_empty() {
-            return Err(Error::EmptyStringOnConversion)
+        let s = value.trim_start_matches('#');
+        if s.len() != 6 {
+            return Err(if s.len() < 6 {
+                Error::StringTooShortOnConversion
+            } else {
+                Error::StringTooLongOnConversion
+            })
         }
-        if value.starts_with("#") {
-            if value.len() < 7 {
-                return Err(Error::StringTooShortOnConversion)
-            }
-            if value.len() > 7 {
-                return Err(Error::StringTooLongOnConversion)
-            }
-            for char in value.chars() {
-                for hex_char in HEX_CHAR {
-                    if char != hex_char {
-                        return Err(Error::IllegalCharOnConversion)
-                    }
-                }
-            }
-            let ret = u32::from_str_radix(value, 16).unwrap();
-            Ok(Self::Hex(ret))  
-        } else {
-            if value.len() < 6 {
-                return Err(Error::StringTooShortOnConversion)
-            }
-            if value.len() > 6 {
-                return Err(Error::StringTooLongOnConversion)
-            }
-            for char in value.chars() {
-                for hex_char in HEX_CHAR {
-                    if char != hex_char {
-                        return Err(Error::IllegalCharOnConversion)
-                    }
-                } 
-            }
-            let ret = u32::from_str_radix(value, 16).unwrap();
-            Ok(Self::Hex(ret))
+        for c in s.chars() {
+            Self::only_hex_char(c)?;
         }
-    }
-}
-
-impl TryFrom<u8> for Color {
-    type Error = Error;
-
-    fn try_from(value: u8) -> ::std::result::Result<Self, Self::Error> {
-        let ret: u32 = value.into();
-        let ret: Self = ret.try_into()?;
-        Ok(ret)
-    }
-}
-
-impl TryFrom<u16> for Color {
-    type Error = Error;
-
-    fn try_from(value: u16) -> ::std::result::Result<Self, Self::Error> {
-        let ret: u32 = value.into();
-        let ret: Self = ret.try_into()?;
-        Ok(ret)
+        let ret = u32::from_str_radix(s, 16).unwrap();
+        Ok(Self::Hex(ret))
     }
 }
 
@@ -162,74 +174,18 @@ impl TryFrom<u32> for Color {
 
     fn try_from(value: u32) -> ::std::result::Result<Self, Self::Error> {
         if value > 0xffffff {
-            return Err(Error::HexOutOfRange)
+            return Err(Error::ValueOutOf24BitRGBRange)
         }
         Ok(Self::Hex(value))
     }
 }
 
-impl TryFrom<u64> for Color {
-    type Error = Error;
-
-    fn try_from(value: u64) -> ::std::result::Result<Self, Self::Error> {
-        let ret: u32 = value.try_into()?;
-        let ret: Self = ret.try_into()?;
-        Ok(ret)
-    }
-}
-
-impl TryFrom<u128> for Color {
-    type Error = Error;
-
-    fn try_from(value: u128) -> ::std::result::Result<Self, Self::Error> {
-        let ret: u32 = value.try_into()?;
-        let ret: Self = ret.try_into()?;
-        Ok(ret)
-    }
-}
-
-impl TryFrom<usize> for Color {
-    type Error = Error;
-
-    fn try_from(value: usize) -> ::std::result::Result<Self, Self::Error> {
-        let ret: u32 = value.try_into()?;
-        let ret: Self = ret.try_into()?;
-        Ok(ret)
-    }
-}
-
 impl ::std::fmt::Display for Color {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", match self {
-            Self::Hex(code) => format!("#{}", code)
-        })
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match self {
+            Self::Hex(code) => write!(f, "#{:06X}", code),
+            Self::Rgb((r, g, b)) => write!(f, "rgb({}, {}, {})", r, g, b),
+            Self::Rgba((r, g, b, a)) => write!(f, "rgba({}, {}, {}, {:.2})", r, g, b, a)
+        }
     }
-}
-
-
-
-
-
-fn interpolate(range: (&str, &str), t: f32) -> String {
-    let (rx, gx, bx) = hex_to_rgb(range.0);
-    let (ry, gy, by) = hex_to_rgb(range.1);
-    let r = rx as f32 + (ry as f32 - rx as f32) * t;
-    let r = r.round() as u8;
-    let g = gx as f32 + (gy as f32 - gx as f32) * t;
-    let g = g.round() as u8;
-    let b = bx as f32 + (by as f32 - bx as f32) * t;
-    let b = b.round() as u8;
-    rgb_to_hex(r, g, b)
-}
-
-fn rgb_to_hex(r: u8, g: u8, b: u8) -> String {
-    format!("#{:02x}{:02x}{:02x}", r, g, b)
-}
-
-fn hex_to_rgb(hex: &str) -> (u8, u8, u8) {
-    let hex = hex.trim_start_matches('#');
-    let r = u8::from_str_radix(&hex[0..2], 16).unwrap();
-    let g = u8::from_str_radix(&hex[2..4], 16).unwrap();
-    let b = u8::from_str_radix(&hex[4..6], 16).unwrap();
-    (r, g, b)
 }
