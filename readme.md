@@ -1,3 +1,11 @@
-# diogen
+# Diogen
+#### A Dioxus and component library for working with WASM on the browser.
+***This case is not stable***
 
-Please be aware that this crate is not yet stable.
+## Contributors
+#### Build
+```bash
+bun run build
+cargo check
+cargo run build --release
+```
